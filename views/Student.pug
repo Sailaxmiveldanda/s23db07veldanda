@@ -1,12 +1,19 @@
 extends layout
 
 block content
-    h1= title
-    - let results=[{Stu_Name: "Sailaxmi",Stu_Age:22,Mail_Id:"laxmi@gmail.com"},{Stu_Name: "Rakshitha",Stu_Age:22,Mail_Id:"raksg@gmail.com"},{Stu_Name: "Shivani",Stu_Age:22,Mail_Id:"shivk@gmail.com"}]
-    div.container-fliud
-        div.row
-            each item,ind in results 
-                div(class='col-sm-2' onclick=`buy(${ind})`) 
-                    p Name  is #{item.Stu_Name}
-                    p Age  is #{item.Stu_Age}
-                    p Mail_Id: #{item.Mail_Id}
+  h1= title
+  - let items = results;
+  div(class="container-fluid")
+    div(class="row")
+      each item,index in items
+        - let destination = `dispatch(\"/Student/update?id=${item._id}\")`
+        div(class="col-sm-2" class="m-1")
+          h3 #{item.Stu_Name}
+          p #{item.Stu_Age}
+          p #{item.Mail_Id}
+          button.btn( class="btn-primary ml-1", onclick= destination) Update
+  script.
+    function dispatch(path){
+      console.log(path);
+      window.location.href=path;
+    }
