@@ -2,6 +2,14 @@ var express = require('express');
 var router = express.Router();
 const Student_controlers= require('../controllers/Student');
 /* GET home page. */
+const secured = (req, res, next) => {
+    if (req.user) {
+        return next();
+    }
+    req.session.returnTo = req.originalUrl;
+    console.log(req.session.returnTo);
+    res.redirect("/login");
+}
 router.get('/', Student_controlers.Student_view_all_Page);
 router.get('/detail', Student_controlers.Student_view_one_Page);
 /* GET create Student page */

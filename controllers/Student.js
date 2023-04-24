@@ -3,8 +3,8 @@ var Student = require('../models/Student');
 
 exports.Student_list = async function (req, res) {
     try {
-        theStudents = await Student.find();
-        res.send(theStudents);
+        theStudent = await Student.find();
+        res.send(theStudent);
     }
     catch (err) {
         res.status(500);
@@ -44,23 +44,28 @@ exports.Student_update_put = async function (req, res) {
     ${JSON.stringify(req.body)}`)
     try {
         let toUpdate = await Student.findById(req.params.id)
+        console.log(toUpdate);
         // Do updates of properties
         if (req.body.Stu_Name) toUpdate.Stu_Name = req.body.Stu_Name;
-        if (req.body.Stu_Age) toUpdate.Stu_Age= req.body.Stu_Age;
+        if (req.body.Stu_Age) toUpdate.Stu_Age = req.body.Stu_Age;
         if (req.body.Mail_Id) toUpdate.Mail_Id = req.body.Mail_Id;
         let result = await toUpdate.save();
         console.log("Sucess " + result)
         res.send(result)
+        
     } catch (err) {
+        // console.log(err);
+        var temp = Object.keys(err.errors)[0]
+        console.log(JSON.stringify(err.errors[temp].message));
         res.status(500)
-        res.send(`{"error": ${err}: Update for id ${req.params.id}
-    failed`);
+        res.send(`{'error': '${err}'}`);
+    // res.send(`{"error": "${err.errors[temp].message} failed"}`);
     }
 };
 exports.Student_view_all_Page = async function (req, res) {
     try {
-        theStudents = await Student.find();
-        res.render('Student', { title: 'Student Search Results', results: theStudents });
+        theStudent = await Student.find();
+        res.render('Student', { title: 'Student Search Results', results: theStudent });
     }
     catch (err) {
         res.status(500);
@@ -71,7 +76,8 @@ exports.Student_view_one_Page = async function (req, res) {
     console.log("single view for id " + req.query.id)
     try {
         result = await Student.findById(req.query.id)
-        res.render('Studentdetail', { title: 'Student Detail', toShow: result });
+        res.render('Studentdetail',
+            { title: 'Student Detail', toShow: result });
     }
     catch (err) {
         res.status(500)
@@ -81,6 +87,10 @@ exports.Student_view_one_Page = async function (req, res) {
 exports.Student_create_post = async function (req, res) {
     console.log(req.body)
     let document = new Student();
+    // We are looking for a body, since POST does not have query parameters.
+    // Even though bodies can be in many different formats, we will be picky
+    // and require that it be a json object
+    // {"Student_type":"goat", "cost":12, "size":"large"}
     document.Stu_Name = req.body.Stu_Name;
     document.Stu_Age = req.body.Stu_Age;
     document.Mail_Id = req.body.Mail_Id;
@@ -120,7 +130,8 @@ exports.Student_delete_Page = async function (req, res) {
     console.log("Delete view for id " + req.query.id)
     try {
         result = await Student.findById(req.query.id)
-        res.render('Studentdelete', { title: 'Student Delete', toShow:
+        res.render('Studentdelete', {
+            title: 'Student Delete', toShow:
                 result
         });
     }
