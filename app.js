@@ -8,7 +8,8 @@ var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
 passport.use(new LocalStrategy(
   function(username, password, done) {
-  Account.findOne({ username: username }, function (err, user) {
+  Account.findOne({ username: username })
+  .then(function (user){
   if (err) { return done(err); }
   if (!user) {
   return done(null, false, { message: 'Incorrect username.' });
@@ -17,9 +18,14 @@ passport.use(new LocalStrategy(
   return done(null, false, { message: 'Incorrect password.' });
   }
   return done(null, user);
-  });
-  }
-  ));
+  })
+  .catch(function(err){
+  return done(err)
+  })
+  })
+  )
+
+  
 //Get the default connection
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');

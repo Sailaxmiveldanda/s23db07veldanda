@@ -87,12 +87,12 @@ block content
     .container-fluid(onload='load()')
       .row 
         each Student,key in results
-          div(class="col-sm-2" style=`margin:5px;border-radius:12px;text-align:center;background:white;border:solid 2px black;display:flex;flex-direction:row;flex-wrap:wrap` onclick=`buy(${key})`) 
+          div(class="col-sm-3" style=`margin:5px;border-radius:12px;text-align:center;background:aqua;border:solid 2px black;display:flex;flex-direction:row;flex-wrap:wrap` onclick=`buy(${key})`) 
               h3= Student.Stu_Name
               div#buttons
-                a(class='btn btn-primary' href=`/Student/detail/?id=${Student._id}`) Details
-                a(class='btn btn-primary' href=`/Student/update/?id=${Student._id}`) Update
-                a(class='btn btn-primary' href=`/Student/delete/?id=${Student._id}`) Delete
+                a(class='btn btn-success' href=`/Student/create/?id=${Student._id}`) Create 
+                a(class='btn btn-warning' href=`/Student/detail/?id=${Student._id}`) Detail 
+                a(class='btn btn-danger' href=`/Student/delete/?id=${Student._id}`) Delete
   script.
     function load(){
       console.log("cared")
